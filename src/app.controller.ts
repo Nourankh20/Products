@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 type item = {
@@ -20,8 +20,8 @@ export class AppController {
     return this.appService.getProducts();
   }
 
-  @Get('/product')
-  getProduct(@Body() id:string) {
+  @Get('/products/:id')
+  getProduct(@Param('id') id:string) {
     return this.appService.getProduct(id);
   }
 
