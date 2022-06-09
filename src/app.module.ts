@@ -7,7 +7,7 @@ require('dotenv').config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGO_URL),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     MongooseModule.forFeature([{ name: Inventory.name, schema: InventorySchema }])
   ],
   controllers: [AppController],
