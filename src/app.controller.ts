@@ -8,7 +8,12 @@ type item = {
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService) {
+    this.appService.consume();
+  }
+
+
+
 
   @Get()
   getHello(): string {

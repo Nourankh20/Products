@@ -3,10 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Inventory, InventorySchema } from './schema/inventory.schemas';
+require('dotenv').config();
 
 @Module({
   imports: [
-    MongooseModule.forRoot(process.env.MONGO_URI),
+    MongooseModule.forRoot(process.env.MONGO_URL),
     MongooseModule.forFeature([{ name: Inventory.name, schema: InventorySchema }])
   ],
   controllers: [AppController],
