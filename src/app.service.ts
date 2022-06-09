@@ -34,13 +34,13 @@ export class AppService {
     products.map(async (p)=>{
       let prod = await this.inventroyModel.findOne({_id:p.id}).exec(); 
       console.log('prod', prod.stock)
-      let newQuantity ;
+      let newQuantity;
 
       if(prod.stock>p.stock){
         newQuantity = prod.stock - p.stock
             }
       else{
-        newQuantity = prod.stock
+        newQuantity = 0
       }
       await this.inventroyModel.updateOne({_id:p.id},
         {
