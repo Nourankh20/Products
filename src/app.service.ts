@@ -17,7 +17,7 @@ type item = {
 export class AppService {
   
   params = {
-    QueueUrl: config.PRODUCT_SQS_K,
+    QueueUrl: process.env.PRODUCT_SQS_K,
   };
   private sqs;
   private sns;
@@ -28,8 +28,8 @@ export class AppService {
 
       AWS.config.update({
         region: 'us-east-1',
-        accessKeyId: config.ACCESS_KEY_ID_K,
-        secretAccessKey: config.SECRET_ACCESS_KEY_K,
+        accessKeyId: process.env.ACCESS_KEY_ID_K,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY_K,
       });
       this.sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
       this.sns = new AWS.SNS({ apiVersion: '2010-03-31' });
@@ -99,7 +99,7 @@ export class AppService {
             },
             // more items 
           ],
-          QueueUrl: config.PRODUCT_SQS_K //required 
+          QueueUrl: process.env.PRODUCT_SQS_K //required 
         };
 
         var x = await JSON.parse(message.Body);
