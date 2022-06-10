@@ -5,7 +5,7 @@ import { Inventory, InventoryDocument } from './schema/inventory.schemas';
 require('dotenv').config();
 //new imports
 import * as AWS from 'aws-sdk';
-import {config} from '../config'
+// import {config} from '../config'
 const { Consumer } = require('sqs-consumer');
 
 type item = {
