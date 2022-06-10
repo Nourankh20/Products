@@ -61,7 +61,7 @@ export class AppService {
     } else {
       newQuantity = 0;
     }
-    await this.inventroyModel
+    const update = await this.inventroyModel
       .updateOne(
         { _id: msg.id },
         {
