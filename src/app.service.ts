@@ -18,7 +18,7 @@ type item = {
 export class AppService {
   
   params = {
-    QueueUrl: config.PRODUCT_SQS,
+    QueueUrl: config.PRODUCT_SQS_K,
   };
   private sqs;
   private sns;
@@ -29,8 +29,8 @@ export class AppService {
 
       AWS.config.update({
         region: 'us-east-1',
-        accessKeyId: config.ACCESS_KEY_ID,
-        secretAccessKey: config.SECRET_ACCESS_KEY,
+        accessKeyId: config.ACCESS_KEY_ID_K,
+        secretAccessKey: config.SECRET_ACCESS_KEY_K,
       });
       this.sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
       this.sns = new AWS.SNS({ apiVersion: '2010-03-31' });
@@ -85,7 +85,7 @@ export class AppService {
     console.log("zewwwww products")
     
     Consumer.create({
-      queueUrl: config.PRODUCT_SQS,
+      queueUrl: config.PRODUCT_SQS_K,
       handleMessage: async (message) => {
 
         var params = {
@@ -96,7 +96,7 @@ export class AppService {
             },
             // more items 
           ],
-          QueueUrl: config.PRODUCT_SQS //required 
+          QueueUrl: config.PRODUCT_SQS_K //required 
         };
 
         const x = message.Body
