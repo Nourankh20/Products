@@ -18,7 +18,7 @@ export class Inventory {
 
   @Prop({ required: true })
   weight: number;
-
+  
   @Prop({ required: true })
   measurement: string;
 

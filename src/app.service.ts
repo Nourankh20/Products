@@ -8,7 +8,6 @@ import * as AWS from 'aws-sdk';
 import {config} from '../config'
 const { Consumer } = require('sqs-consumer');
 
-
 type item = {
   id: string;
   stock: number;
@@ -54,19 +53,23 @@ export class AppService {
 
 
 
-  async buy(products:item[]):Promise<any>{
-    products.map(async (p)=>{
-      let prod = await this.inventroyModel.findOne({_id:p.id}).exec(); 
+  async buy(body: any):Promise<any>{
+      const z = await body;
+      const msg = {
+        id: z.item,
+        stock:z.quantity
+      }
+      let prod = await this.inventroyModel.findOne({_id:msg.id}).exec(); 
       console.log('prod', prod.stock)
       let newQuantity;
 
-      if(prod.stock>p.stock){
-        newQuantity = prod.stock - p.stock
+      if(prod.stock>msg.stock){
+        newQuantity = prod.stock - msg.stock
             }
       else{
         newQuantity = 0
       }
-      await this.inventroyModel.updateOne({_id:p.id},
+      await this.inventroyModel.updateOne({_id:msg.id},
         {
         $set: {
           stock: newQuantity,
@@ -75,17 +78,17 @@ export class AppService {
       { upsert: true }).exec();
     
 
-      prod = await this.inventroyModel.findOne({_id:p.id}).exec(); 
+      prod = await this.inventroyModel.findOne({_id:msg.id}).exec(); 
       console.log('prod', prod.stock)
 
-   })}
+   }
 
 
    consume() {
-    console.log("zewwwww products")
-    
+    console.log("zewwwww products") 
+    console.log('process.env.PRODUCT_SQS_K', process.env.PRODUCT_SQS_K)
     Consumer.create({
-      queueUrl: config.PRODUCT_SQS_K,
+      queueUrl: process.env.PRODUCT_SQS_K,
       handleMessage: async (message) => {
 
         var params = {
@@ -99,8 +102,10 @@ export class AppService {
           QueueUrl: config.PRODUCT_SQS_K //required 
         };
 
-        const x = message.Body
-        console.log(x)
+        var x = await JSON.parse(message.Body);
+        var y = await JSON.parse(x.Message);
+        console.log(y)
+        this.buy(y)
         this.sqs.deleteMessageBatch(params, function(err, data) {
           if (err) console.log(err, err.stack); // an error occurred
           else     console.log(data);           // successful response

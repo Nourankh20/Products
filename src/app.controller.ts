@@ -30,9 +30,9 @@ export class AppController {
     return this.appService.getProduct(id);
   }
 
-  @Post('/buy')
-  buyProducts(@Body() products:item[]) {
-    return this.appService.buy(products);
+  // @Post('/buy')
+  // buyProducts(@Body() products:item) {
+  //   return this.appService.buy(products);
 
-  }
+  // }
 }
