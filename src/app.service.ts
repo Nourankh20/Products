@@ -50,7 +50,7 @@ export class AppService {
     // let z = body
     const z = await body;
     const msg = {
-      id: z.productID,
+      id: z.productId,
       stock: z.quantity,
     };
     let prod = await this.inventroyModel.findOne({ _id: msg.id }).exec();
