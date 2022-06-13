@@ -47,6 +47,7 @@ export class AppService {
   }
 
   async buy(body: any, params:any): Promise<any> {
+    // let z = body
     const z = await body;
     const msg = {
       id: z.item,
@@ -72,13 +73,13 @@ export class AppService {
         { upsert: true },
       )
       .exec();
-
-    prod = await this.inventroyModel.findOne({ _id: msg.id }).exec();
-
     await this.sqs.deleteMessageBatch(params, function (err, data) {
-      if (err) console.log(err, err.stack); // an error occurred
-      else console.log(data); // successful response
-    });
+          if (err) console.log(err, err.stack); // an error occurred
+          else console.log(data); // successful response
+        });
+    return await this.inventroyModel.findOne({ _id: msg.id }).exec();
+
+   
 
     console.log('prod', prod.stock);
   }
@@ -106,7 +107,7 @@ export class AppService {
         console.log(y);
 
         this.buy(y,params);
-        
+
       //   await this.buy(y,params).then(() => {
       //     this.sqs.deleteMessageBatch(params, function (err, data) {
       //       if (err) console.log(err, err.stack); // an error occurred

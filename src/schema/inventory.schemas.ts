@@ -12,7 +12,6 @@ export class Inventory {
   @Prop({ required: true })
   name: string;
 
-
   @Prop({ required: true })
   image: string;
 
@@ -27,6 +26,9 @@ export class Inventory {
 
   @Prop({ required: true })
   stock: number;
+
+  @Prop({ required: true })
+  price: number;
 }
 
 export const InventorySchema = SchemaFactory.createForClass(Inventory);
