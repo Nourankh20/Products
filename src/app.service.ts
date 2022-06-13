@@ -46,7 +46,8 @@ export class AppService {
     return await this.inventroyModel.findOne({ _id: id }).exec();
   }
 
-  async buy(body: any, params:any): Promise<any> {
+  
+  async buy(body: any): Promise<any> {
     // let z = body
     const z = await body;
     const msg = {
@@ -73,10 +74,6 @@ export class AppService {
         { upsert: true },
       )
       .exec();
-    await this.sqs.deleteMessageBatch(params, function (err, data) {
-          if (err) console.log(err, err.stack); // an error occurred
-          else console.log(data); // successful response
-        });
     return await this.inventroyModel.findOne({ _id: msg.id }).exec();
 
    
@@ -84,38 +81,36 @@ export class AppService {
     console.log('prod', prod.stock);
   }
 
-  consume() {
-    console.log('zewwwww products');
-    console.log('process.env.PRODUCT_SQS_K', process.env.PRODUCT_SQS_K);
+  async consume() {
+    console.log("consumer start")
     Consumer.create({
-      queueUrl: process.env.PRODUCT_SQS_K,
+      queueUrl: process.env.NOTIFICATION_SQS_K,
       handleMessage: async (message) => {
-        var params = {
-          Entries: [
-            //required
-            {
-              Id: message.MessageId, //required
-              ReceiptHandle: message.ReceiptHandle, //required
-            },
-            // more items
-          ],
-          QueueUrl: process.env.PRODUCT_SQS_K, //required
-        };
+     console.log("handleMessage start")
 
+        var params = {
+          Entries: [ /* required */
+            {
+              Id: message.MessageId, /* required */
+              ReceiptHandle: message.ReceiptHandle/* required */
+            },
+            /* more items */
+          ],
+          QueueUrl: process.env.NOTIFICATION_SQS_K /* required */
+        };
+        console.log("consumer");
         var x = await JSON.parse(message.Body);
         var y = await JSON.parse(x.Message);
+        
         console.log(y);
-
-        this.buy(y,params);
-
-      //   await this.buy(y,params).then(() => {
-      //     this.sqs.deleteMessageBatch(params, function (err, data) {
-      //       if (err) console.log(err, err.stack); // an error occurred
-      //       else console.log(data); // successful response
-      //     });
-      //   });
+        this.buy(y);
+        this.sqs.deleteMessageBatch(params, function (err, data) {
+          if (err) console.log(err, err.stack); // an error occurred
+          else console.log("deleted ",data);           // successful response
+        });
+        
       },
-    }
-    ).start();
+    }).start()
+
   }
 }
