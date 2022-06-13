@@ -46,7 +46,7 @@ export class AppService {
     return await this.inventroyModel.findOne({ _id: id }).exec();
   }
 
-  
+
   async buy(body: any): Promise<any> {
     // let z = body
     const z = await body;
@@ -96,7 +96,7 @@ export class AppService {
             },
             /* more items */
           ],
-          QueueUrl: process.env.NOTIFICATION_SQS_K /* required */
+          QueueUrl: process.env.PRODUCT_SQS_K /* required */
         };
         console.log("consumer");
         var x = await JSON.parse(message.Body);
