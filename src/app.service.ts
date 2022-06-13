@@ -84,7 +84,7 @@ export class AppService {
   async consume() {
     console.log("consumer start")
     Consumer.create({
-      queueUrl: process.env.NOTIFICATION_SQS_K,
+      queueUrl: process.env.PRODUCT_SQS_K,
       handleMessage: async (message) => {
      console.log("handleMessage start")
 
